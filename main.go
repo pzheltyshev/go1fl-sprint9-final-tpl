@@ -86,10 +86,6 @@ func maxChunks(data []int) int {
 
 	wg.Wait()
 
-	if len(maxList) == 0 {
-		return 0
-	}
-
 	elem := maximum(maxList)
 
 	return elem
