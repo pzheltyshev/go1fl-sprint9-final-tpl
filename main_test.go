@@ -8,43 +8,23 @@ import (
 
 func TestMaximum(t *testing.T) {
 
-	var data []int
-
-	r := maximum(data)
-
-	assert.Equal(t, 0, r)
-
-	data = make([]int, 0)
-
-	r = maximum(data)
-
-	assert.Equal(t, 0, r)
-
-	data = append(data, 1)
-
-	r = maximum(data)
-
-	assert.Equal(t, 1, r)
-
-	data = []int{}
-
-	for i := 0; i < 8; i++ {
-		data = append(data, 2)
+	tests := []struct {
+		data     []int
+		expected int
+	}{
+		{nil, 0},
+		{[]int{}, 0},
+		{[]int{1}, 1},
+		{[]int{2, 2, 2, 2, 2, 2, 2, 2}, 2},
+		{[]int{-2, -2, -2, -2, -2, -2, -2, -2}, -2},
 	}
 
-	r = maximum(data)
+	for _, tt := range tests {
 
-	assert.Equal(t, 2, r)
+		res := maximum(tt.data)
+		assert.Equal(t, tt.expected, res)
 
-	data = []int{}
-
-	for i := 0; i < 8; i++ {
-		data = append(data, -2)
 	}
-
-	r = maximum(data)
-
-	assert.Equal(t, -2, r)
 
 }
 

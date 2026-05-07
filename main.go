@@ -35,7 +35,7 @@ func generateRandomElements(size int) []int {
 func maximum(data []int) int {
 
 	if data == nil || len(data) == 0 {
-		return 0 //что правильнее возвращать, потенциально в data могло быть число 0
+		return 0
 	}
 
 	if len(data) == 1 {
@@ -59,13 +59,12 @@ func maxChunks(data []int) int {
 
 	var portion int
 	var wg sync.WaitGroup
-	var mu sync.Mutex
 
-	maxList := []int{}
+	maxList := make([]int, 8)
 
 	portion = len(data) / CHUNKS
 
-	if portion <= 0 {
+	if portion == 0 {
 		return maximum(data)
 	}
 
@@ -78,23 +77,9 @@ func maxChunks(data []int) int {
 
 			defer wg.Done()
 
-			if len(partData) == 0 {
-				return
-			}
+			elem := maximum(partData)
 
-			elem := partData[0]
-
-			for i := range partData {
-				if partData[i] > elem {
-					elem = partData[i]
-				}
-			}
-
-			mu.Lock()
-
-			maxList = append(maxList, elem)
-
-			mu.Unlock()
+			maxList[i] = elem
 
 		}(data[i*portion : i*portion+rest])
 	}
@@ -102,15 +87,10 @@ func maxChunks(data []int) int {
 	wg.Wait()
 
 	if len(maxList) == 0 {
-		return 0 // по хорошему бы выкидывать ошибку на уровне функции
+		return 0
 	}
 
-	elem := maxList[0]
-	for i := range maxList {
-		if maxList[i] > elem {
-			elem = maxList[i]
-		}
-	}
+	elem := maximum(maxList)
 
 	return elem
 }
